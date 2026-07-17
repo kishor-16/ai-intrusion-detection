@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-NetTCPConnection -LocalPort 5173 -State Listen | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force })",
+      "Bash(curl -s http://localhost:4000/scenario/status)",
+      "Bash(curl -s http://localhost:4000/metrics)"
+    ]
+  }
+}

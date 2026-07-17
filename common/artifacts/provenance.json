@@ -1,0 +1,7 @@
+{
+  "data_source": "ciciot2023-subset",
+  "rows_after_cleaning": 263064,
+  "generated_at": "2026-07-17T19:04:44",
+  "seed": 42,
+  "note": "Real CICIoT2023 stratified subset."
+}

@@ -1,0 +1,20 @@
+# EdgeShield AI — pinned Python dependencies (Python 3.10–3.12).
+# GPU training: install the CUDA build of torch FIRST (see README), then the rest:
+#   pip install torch==2.3.1 --index-url https://download.pytorch.org/whl/cu121
+#   pip install -r requirements.txt
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.4.2
+joblib==1.4.2
+matplotlib==3.8.4
+pyarrow==16.1.0
+tqdm==4.66.4
+requests==2.32.3
+torch==2.3.1
+onnx==1.16.1
+onnxruntime==1.18.0
+fastapi==0.111.0
+uvicorn==0.30.1
+# NOTE: the shap package is NOT required — SHAP values are estimated with a
+# pure-PyTorch Expected Gradients implementation (ml-engine/explain_utils.py),
+# because shap's numba/llvmlite binaries crash silently on some Windows setups.

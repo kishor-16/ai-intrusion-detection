@@ -1,0 +1,142 @@
+{
+  "engine": "builtin-fedavg",
+  "algorithm": "FedAvg (McMahan et al. 2017)",
+  "seed": 42,
+  "num_clients": 5,
+  "partition": "non-IID by device profile (60% primary attack class)",
+  "local_epochs": 2,
+  "duration_sec": 199.6,
+  "privacy_note": "Only model weights are exchanged; raw flows never leave a client shard.",
+  "centralized_reference_accuracy": 0.853,
+  "clients": [
+    {
+      "id": "client-camera",
+      "name": "Smart Camera edge node",
+      "attack": "DDoS",
+      "samples": 39415,
+      "class_distribution": {
+        "Normal": 7000,
+        "DDoS": 21000,
+        "Brute Force": 915,
+        "Spoofing": 3500,
+        "Scanning": 3500,
+        "Malware": 3500
+      }
+    },
+    {
+      "id": "client-sensor",
+      "name": "Industrial Sensor edge node",
+      "attack": "Spoofing",
+      "samples": 39415,
+      "class_distribution": {
+        "Normal": 7000,
+        "DDoS": 3500,
+        "Brute Force": 915,
+        "Spoofing": 21000,
+        "Scanning": 3500,
+        "Malware": 3500
+      }
+    },
+    {
+      "id": "client-router",
+      "name": "Smart Router edge node",
+      "attack": "Scanning",
+      "samples": 39414,
+      "class_distribution": {
+        "Normal": 7000,
+        "DDoS": 3500,
+        "Brute Force": 914,
+        "Spoofing": 3500,
+        "Scanning": 21000,
+        "Malware": 3500
+      }
+    },
+    {
+      "id": "client-medical",
+      "name": "Medical IoT edge node",
+      "attack": "Brute Force",
+      "samples": 26486,
+      "class_distribution": {
+        "Normal": 7000,
+        "DDoS": 3500,
+        "Brute Force": 5486,
+        "Spoofing": 3500,
+        "Scanning": 3500,
+        "Malware": 3500
+      }
+    },
+    {
+      "id": "client-home",
+      "name": "Smart Home edge node",
+      "attack": "Malware",
+      "samples": 39414,
+      "class_distribution": {
+        "Normal": 7000,
+        "DDoS": 3500,
+        "Brute Force": 914,
+        "Spoofing": 3500,
+        "Scanning": 3500,
+        "Malware": 21000
+      }
+    }
+  ],
+  "rounds": [
+    {
+      "round": 0,
+      "accuracy": 0.1901,
+      "f1_macro": 0.0532,
+      "note": "untrained global model"
+    },
+    {
+      "round": 1,
+      "accuracy": 0.8034,
+      "f1_macro": 0.7244
+    },
+    {
+      "round": 2,
+      "accuracy": 0.8182,
+      "f1_macro": 0.7402
+    },
+    {
+      "round": 3,
+      "accuracy": 0.8254,
+      "f1_macro": 0.7592
+    },
+    {
+      "round": 4,
+      "accuracy": 0.8244,
+      "f1_macro": 0.7572
+    },
+    {
+      "round": 5,
+      "accuracy": 0.8309,
+      "f1_macro": 0.768
+    },
+    {
+      "round": 6,
+      "accuracy": 0.833,
+      "f1_macro": 0.7727
+    },
+    {
+      "round": 7,
+      "accuracy": 0.8352,
+      "f1_macro": 0.7764
+    },
+    {
+      "round": 8,
+      "accuracy": 0.8348,
+      "f1_macro": 0.7804
+    },
+    {
+      "round": 9,
+      "accuracy": 0.8363,
+      "f1_macro": 0.7794
+    },
+    {
+      "round": 10,
+      "accuracy": 0.8384,
+      "f1_macro": 0.7872
+    }
+  ],
+  "generated_at": "2026-07-17T19:11:38"
+}

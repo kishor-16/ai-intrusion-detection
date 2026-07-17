@@ -1,0 +1,276 @@
+{
+  "generated_at": "2026-07-17T19:08:15",
+  "method": "Expected Gradients (SHAP GradientExplainer estimator, pure PyTorch), 200-flow background, correctly-classified test flows",
+  "per_class": {
+    "Normal": {
+      "n_flows": 150,
+      "top_features": [
+        {
+          "feature": "Header_Length",
+          "impact": 1.08274,
+          "direction": "+"
+        },
+        {
+          "feature": "rst_count",
+          "impact": 0.98517,
+          "direction": "+"
+        },
+        {
+          "feature": "urg_count",
+          "impact": 0.70888,
+          "direction": "+"
+        },
+        {
+          "feature": "IAT",
+          "impact": 0.61354,
+          "direction": "+"
+        },
+        {
+          "feature": "flow_duration",
+          "impact": 0.54832,
+          "direction": "-"
+        },
+        {
+          "feature": "Number",
+          "impact": 0.54251,
+          "direction": "+"
+        },
+        {
+          "feature": "Max",
+          "impact": 0.39214,
+          "direction": "+"
+        },
+        {
+          "feature": "syn_count",
+          "impact": 0.31438,
+          "direction": "-"
+        }
+      ]
+    },
+    "DDoS": {
+      "n_flows": 150,
+      "top_features": [
+        {
+          "feature": "IAT",
+          "impact": 1.09857,
+          "direction": "+"
+        },
+        {
+          "feature": "rst_count",
+          "impact": 0.57383,
+          "direction": "+"
+        },
+        {
+          "feature": "Number",
+          "impact": 0.56377,
+          "direction": "+"
+        },
+        {
+          "feature": "Variance",
+          "impact": 0.49516,
+          "direction": "+"
+        },
+        {
+          "feature": "Weight",
+          "impact": 0.4863,
+          "direction": "+"
+        },
+        {
+          "feature": "Header_Length",
+          "impact": 0.42962,
+          "direction": "-"
+        },
+        {
+          "feature": "flow_duration",
+          "impact": 0.42748,
+          "direction": "+"
+        },
+        {
+          "feature": "Magnitue",
+          "impact": 0.41934,
+          "direction": "+"
+        }
+      ]
+    },
+    "Brute Force": {
+      "n_flows": 150,
+      "top_features": [
+        {
+          "feature": "urg_count",
+          "impact": 0.88165,
+          "direction": "-"
+        },
+        {
+          "feature": "flow_duration",
+          "impact": 0.86206,
+          "direction": "+"
+        },
+        {
+          "feature": "Header_Length",
+          "impact": 0.69505,
+          "direction": "+"
+        },
+        {
+          "feature": "syn_count",
+          "impact": 0.63551,
+          "direction": "+"
+        },
+        {
+          "feature": "rst_count",
+          "impact": 0.44018,
+          "direction": "+"
+        },
+        {
+          "feature": "IAT",
+          "impact": 0.40337,
+          "direction": "+"
+        },
+        {
+          "feature": "SSH",
+          "impact": 0.36924,
+          "direction": "+"
+        },
+        {
+          "feature": "Number",
+          "impact": 0.30823,
+          "direction": "+"
+        }
+      ]
+    },
+    "Spoofing": {
+      "n_flows": 150,
+      "top_features": [
+        {
+          "feature": "Header_Length",
+          "impact": 1.42673,
+          "direction": "+"
+        },
+        {
+          "feature": "rst_count",
+          "impact": 1.29424,
+          "direction": "-"
+        },
+        {
+          "feature": "IAT",
+          "impact": 0.98243,
+          "direction": "+"
+        },
+        {
+          "feature": "Number",
+          "impact": 0.93673,
+          "direction": "+"
+        },
+        {
+          "feature": "urg_count",
+          "impact": 0.92813,
+          "direction": "+"
+        },
+        {
+          "feature": "flow_duration",
+          "impact": 0.40034,
+          "direction": "-"
+        },
+        {
+          "feature": "Weight",
+          "impact": 0.23698,
+          "direction": "+"
+        },
+        {
+          "feature": "syn_count",
+          "impact": 0.23119,
+          "direction": "+"
+        }
+      ]
+    },
+    "Scanning": {
+      "n_flows": 150,
+      "top_features": [
+        {
+          "feature": "Header_Length",
+          "impact": 0.97612,
+          "direction": "+"
+        },
+        {
+          "feature": "rst_count",
+          "impact": 0.69291,
+          "direction": "-"
+        },
+        {
+          "feature": "flow_duration",
+          "impact": 0.63737,
+          "direction": "+"
+        },
+        {
+          "feature": "IAT",
+          "impact": 0.59085,
+          "direction": "+"
+        },
+        {
+          "feature": "urg_count",
+          "impact": 0.55761,
+          "direction": "+"
+        },
+        {
+          "feature": "fin_count",
+          "impact": 0.41742,
+          "direction": "+"
+        },
+        {
+          "feature": "Number",
+          "impact": 0.40121,
+          "direction": "+"
+        },
+        {
+          "feature": "TCP",
+          "impact": 0.18827,
+          "direction": "+"
+        }
+      ]
+    },
+    "Malware": {
+      "n_flows": 150,
+      "top_features": [
+        {
+          "feature": "Protocol Type",
+          "impact": 1.17835,
+          "direction": "+"
+        },
+        {
+          "feature": "Header_Length",
+          "impact": 0.81101,
+          "direction": "-"
+        },
+        {
+          "feature": "IAT",
+          "impact": 0.72011,
+          "direction": "+"
+        },
+        {
+          "feature": "rst_count",
+          "impact": 0.64706,
+          "direction": "+"
+        },
+        {
+          "feature": "Number",
+          "impact": 0.62824,
+          "direction": "+"
+        },
+        {
+          "feature": "Weight",
+          "impact": 0.54525,
+          "direction": "+"
+        },
+        {
+          "feature": "urg_count",
+          "impact": 0.50203,
+          "direction": "+"
+        },
+        {
+          "feature": "Tot size",
+          "impact": 0.33429,
+          "direction": "+"
+        }
+      ]
+    }
+  }
+}

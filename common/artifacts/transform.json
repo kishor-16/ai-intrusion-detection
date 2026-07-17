@@ -1,0 +1,30 @@
+{
+  "signed_log1p_columns": [
+    "flow_duration",
+    "Header_Length",
+    "Duration",
+    "Rate",
+    "Srate",
+    "Drate",
+    "ack_count",
+    "syn_count",
+    "fin_count",
+    "urg_count",
+    "rst_count",
+    "Tot sum",
+    "Min",
+    "Max",
+    "AVG",
+    "Std",
+    "Tot size",
+    "IAT",
+    "Number",
+    "Magnitue",
+    "Radius",
+    "Covariance",
+    "Variance",
+    "Weight"
+  ],
+  "post_scale_clip": 8.0,
+  "note": "Applied by preprocess (training) AND the inference service (serving) \u2014 raw flow -> signed log1p -> scaler -> clip."
+}

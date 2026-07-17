@@ -1,0 +1,11 @@
+{
+  "classes": [
+    "Normal",
+    "DDoS",
+    "Brute Force",
+    "Spoofing",
+    "Scanning",
+    "Malware"
+  ],
+  "n_features": 46
+}

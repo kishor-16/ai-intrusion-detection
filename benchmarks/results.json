@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-07-17T19:12:21",
+  "test_rows": 39460,
+  "classes": [
+    "Normal",
+    "DDoS",
+    "Brute Force",
+    "Spoofing",
+    "Scanning",
+    "Malware"
+  ],
+  "data_source": "ciciot2023-subset",
+  "baseline": {
+    "name": "Centralized IEEE-style MLP (float32)",
+    "accuracy": 0.86,
+    "f1_macro": 0.8298,
+    "size_kb": 1661.2,
+    "latency": {
+      "mean_ms": 0.048,
+      "p50_ms": 0.047,
+      "p95_ms": 0.058,
+      "runs": 300
+    },
+    "params": 422150,
+    "raw_data_leaves_device": true,
+    "explainable": false,
+    "edge_ready": false
+  },
+  "edgeshield_fp32": {
+    "accuracy": 0.853,
+    "f1_macro": 0.8224,
+    "size_kb": 218.4,
+    "latency": {
+      "mean_ms": 0.022,
+      "p50_ms": 0.021,
+      "p95_ms": 0.023,
+      "runs": 300
+    }
+  },
+  "edgeshield": {
+    "name": "EdgeShield AI (int8 edge model + FL + SHAP)",
+    "accuracy": 0.8515,
+    "f1_macro": 0.8205,
+    "size_kb": 75.3,
+    "latency": {
+      "mean_ms": 0.026,
+      "p50_ms": 0.026,
+      "p95_ms": 0.028,
+      "runs": 300
+    },
+    "raw_data_leaves_device": false,
+    "explainable": true,
+    "edge_ready": true,
+    "fl_final_accuracy": 0.8384
+  }
+}

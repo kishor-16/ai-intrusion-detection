@@ -1,0 +1,6 @@
+# Optional: Flower federated-learning simulation engine (pulls in Ray, which is heavy).
+# federated-learning/run_federated.py works WITHOUT this (built-in FedAvg engine).
+# Install only if you want to run the Flower-backed engine:
+#   pip install -r requirements-optional.txt
+#   python federated-learning/run_federated.py --engine flower
+flwr[simulation]==1.9.0
