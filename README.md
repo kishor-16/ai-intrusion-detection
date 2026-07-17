@@ -93,6 +93,55 @@ Verify with: `python -c "import torch; print(torch.cuda.get_device_name(0))"`.
    federated run; Edge Performance shows measured baseline-vs-edge numbers.
 3. **⟲ Reset** — identical replay, every time.
 
+## Notifications setup (email / SMS / alarm — all optional)
+
+The notification system runs out of the box in **simulation mode** (sends are logged
+and recorded as "simulated", nothing crashes). To send real notifications:
+
+**Email (Gmail SMTP):**
+1. Google Account → Security → enable **2-Step Verification**.
+2. Security → **App passwords** → create one for "Mail" → copy the 16-character password.
+3. Copy `.env.example` to `.env` and fill in:
+   `SMTP_USER=you@gmail.com`, `SMTP_PASS=<app password>`, `EMAIL_FROM=you@gmail.com`,
+   `EMAIL_TO=admin@company.com` — or enter them in **Dashboard → Notifications**.
+4. Test: Dashboard → Notifications → **Send test email** (or `POST /notify/test-email`).
+
+**SMS (Twilio):**
+1. Get `Account SID`, `Auth Token`, and a Twilio phone number from the Twilio console.
+2. Fill `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`,
+   `ALERT_PHONE=+91…` in `.env` — or in the dashboard settings page.
+3. Test: **Send test SMS** (or `POST /notify/test-sms`). Without credentials the SMS is
+   simulated and logged. The provider is isolated in `backend/services/smsService.js`
+   so Twilio can be swapped for MSG91 / Fast2SMS.
+
+**Severity policy** (configurable threshold in the settings page):
+Low → dashboard feed only · Medium → + notification record · High → + email ·
+Critical → + email + SMS + browser notification + alarm sound. Outbound sends are
+de-duplicated (one per device+attack per minute) and retried up to 3× on failure —
+every attempt is persisted in the `notifications` table.
+
+**Test the whole pipeline without a real attack:** Dashboard → Notifications →
+**Generate CRITICAL attack** — injects one real attack flow through simulator →
+model inference → scoring → auto-response → notifications.
+
+## Platform services (backend)
+
+Beyond the ML relay, the backend now runs real platform services — every value the
+dashboard shows originates from model inference, SQL aggregates, or live service events:
+
+| Service | What it does | Where |
+|---|---|---|
+| Threat scoring | deterministic 0–100 score + severity from model confidence, attack class, packet rate, anomaly | `backend/scoring.js` |
+| Autonomous response | conf > 0.90 → quarantine device + block traffic + open incident; suspicious/under-attack/recover transitions driven by real detections | `backend/response.js` |
+| Incident management | auto-created incidents, lifecycle Open → Investigating → Contained → Resolved, `GET/PATCH /incidents` | `backend/incidents.js` |
+| Persistence | embedded SQL (better-sqlite3, WAL): devices, flows, threats, predictions, explanations, incidents, FL rounds, metrics samples | `backend/db.js` → `backend/data/edgeshield.db` |
+| Explainability | `POST /explain/{flow_id}` — per-instance SHAP on the stored feature vector + deterministic natural-language explanation | `backend/nlg.js` + inference `/explain` |
+| Analytics | `GET /analytics?window=hour\|day\|week\|month` (SQL aggregation) · `GET /analytics/export.csv` | `backend/db.js` |
+| Live federated learning | `POST /federated/run` spawns `run_federated.py --stream`; real per-round FedAvg progress broadcast as `federated-round` events (FL page: "⚡ Run live FL now") | `backend/fl-runner.js` |
+
+Socket channels: `prediction`, `threat`, `response`, `incident`, `metrics`,
+`device-status`, `scenario-status`, `federated-round`, `federated-status`, `explanation`.
+
 ## Repository map
 
 | Path | What it is |
@@ -101,8 +150,8 @@ Verify with: `python -c "import torch; print(torch.cuda.get_device_name(0))"`.
 | `ml-engine/` | sample/download, preprocess, train, quantize |
 | `ml-inference-service/` | FastAPI: `/predict`, `/explain`, `/model-info` (owns model + SHAP) |
 | `iot-simulator/` | 5 virtual devices emitting schema-matched flows |
-| `backend/` | Node relay + deterministic scenario engine (no ML) |
+| `backend/` | Node gateway: scenario engine, scoring, response, incidents, persistence, analytics (no ML) |
 | `frontend/` | React+Vite SOC dashboard (renders only received data) |
-| `federated-learning/` | FedAvg simulation (5 non-IID clients) → `history.json` |
+| `federated-learning/` | FedAvg — 5 non-IID clients; offline run or live `--stream` mode |
 | `benchmarks/` | measured size/latency/accuracy, baseline comparison |
 | `scripts/` | `prepare_all.py` (build artifacts) · `run_all.py` (bring-up) |

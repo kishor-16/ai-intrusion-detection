@@ -5,7 +5,8 @@ import {
 import { useStore } from '../socket.jsx';
 
 export default function FederatedLearning() {
-  const { api } = useStore();
+  const { state, api } = useStore();
+  const { flLive } = state;
   const [fl, setFl] = useState(null);
   const [shown, setShown] = useState(0);   // replay cursor
   const [playing, setPlaying] = useState(false);
@@ -18,6 +19,20 @@ export default function FederatedLearning() {
     }).catch(() => setFl({ available: false }));
   }, [api]);
   useEffect(() => () => clearInterval(timer.current), []);
+
+  // when a live run finishes, history.json has been rewritten — reload it
+  const wasRunning = useRef(false);
+  useEffect(() => {
+    if (wasRunning.current && !flLive.running) {
+      api.getFederated().then((d) => {
+        setFl(d);
+        if (d?.rounds?.length) setShown(d.rounds.length);
+      }).catch(() => {});
+    }
+    wasRunning.current = flLive.running;
+  }, [flLive.running, api]);
+
+  const liveMode = flLive.running && flLive.rounds.length > 0;
 
   if (!fl) return <div className="panel"><div className="empty">Loading…</div></div>;
   if (!fl.available) {
@@ -34,7 +49,9 @@ export default function FederatedLearning() {
 
   const rounds = fl.rounds || [];
   if (!rounds.length) return <div className="panel"><div className="empty">history.json has no rounds.</div></div>;
-  const data = rounds.slice(0, shown).map((r) => ({ ...r, pct: +(r.accuracy * 100).toFixed(2) }));
+  const data = liveMode
+    ? flLive.rounds.map((r) => ({ ...r, pct: +(r.accuracy * 100).toFixed(2) }))
+    : rounds.slice(0, shown).map((r) => ({ ...r, pct: +(r.accuracy * 100).toFixed(2) }));
   const done = shown >= rounds.length;
 
   function play() {
@@ -66,11 +83,23 @@ export default function FederatedLearning() {
 
       <div className="panel">
         <h3>
-          <span>Global model accuracy per round — replay of the real offline run</span>
-          <button className="btn primary" style={{ padding: '5px 14px', fontSize: 12 }}
-            onClick={play} disabled={playing}>
-            {playing ? 'Replaying…' : done && shown ? '↻ Replay' : '▶ Replay training'}
-          </button>
+          <span>
+            {liveMode
+              ? <>Global model accuracy per round — <span style={{ color: 'var(--green)' }}>● TRAINING LIVE NOW</span></>
+              : 'Global model accuracy per round — replay of the real offline run'}
+          </span>
+          <span style={{ display: 'flex', gap: 8 }}>
+            <button className="btn" style={{ padding: '5px 14px', fontSize: 12 }}
+              onClick={() => api.runFederated({ rounds: 5, localEpochs: 1 })}
+              disabled={flLive.running}
+              title="Spawns run_federated.py on this machine: 5 clients train locally and FedAvg aggregates, streamed here round by round.">
+              {flLive.running ? `⏳ Training… round ${flLive.rounds.length ? flLive.rounds[flLive.rounds.length - 1].round : 0}` : '⚡ Run live FL now'}
+            </button>
+            <button className="btn primary" style={{ padding: '5px 14px', fontSize: 12 }}
+              onClick={play} disabled={playing || flLive.running}>
+              {playing ? 'Replaying…' : done && shown ? '↻ Replay' : '▶ Replay training'}
+            </button>
+          </span>
         </h3>
         <ResponsiveContainer width="100%" height={280}>
           <LineChart data={data}>
@@ -88,8 +117,9 @@ export default function FederatedLearning() {
           </LineChart>
         </ResponsiveContainer>
         <div className="src">
-          source: federated-learning/history.json · engine {fl.engine} · run {fl.generated_at} in {fl.duration_sec}s ·
-          replayed, not re-trained (demo is offline + deterministic)
+          {liveMode
+            ? 'source: live federated-round events — run_federated.py --stream is training on this machine right now'
+            : `source: federated-learning/history.json · engine ${fl.engine} · run ${fl.generated_at} in ${fl.duration_sec}s · replay of a real run (⚡ Run live FL retrains for real)`}
         </div>
       </div>
 

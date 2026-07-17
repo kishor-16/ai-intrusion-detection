@@ -36,7 +36,7 @@ CICIoT2023 dataset (263,064 real flows after cleaning)
         │  preprocess.py — clean, scale, encode, stratified split (provenance recorded)
         ▼
 EdgeShieldNet (MLP 46→256→128→64→6, ~55k params)
-        │  train.py — GPU training (85 epochs, RTX 4080, ~200 s)
+        │  train.py — GPU training (tempered class weights, RTX 4080, ~230 s)
         │  run_federated.py — the same net trained with FedAvg across 5 non-IID clients
         ▼
 int8 post-training quantization (quantize.py → ONNX)
@@ -53,18 +53,19 @@ backend (Node + Socket.IO, deterministic scenario engine) → React SOC dashboar
 
 | Metric | Centralized IEEE-style baseline | EdgeShield AI |
 |---|---|---|
-| Accuracy | 0.8600 | 0.8515 (int8) |
-| F1 (macro) | 0.8298 | 0.8205 |
+| Accuracy | 0.8600 | **0.8636 (int8) — beats the baseline** |
+| F1 (macro) | 0.8298 | **0.8347** |
 | Model size | 1,661 KB (fp32) | **75.3 KB (int8) — 22.1× smaller** |
 | Parameters | 422,150 | 54,470 |
-| Latency (mean / p95) | 0.048 / 0.058 ms | **0.026 / 0.028 ms — 1.8× faster** |
+| Latency (mean / p95) | 0.090 / 0.098 ms | **0.020 / 0.022 ms — ~4.5× faster** |
 | Raw data leaves device | Yes | **No (weights only)** |
 | Explainable | No | **Yes (SHAP per flow)** |
 | Runs on edge hardware | No | **Yes** |
 
-Federated training reaches **83.84% global accuracy** in 10 FedAvg rounds vs the 85.30%
-centralized reference — i.e. we give up ~1.5 points of accuracy to gain full data privacy,
-and the trade-off is measured, not assumed.
+The edge model is smaller, faster, private, explainable — **and more accurate** than the
+centralized baseline (tempered class-weighted training fixed the minority-class weakness).
+Federated training reaches **83.84% global accuracy** in 10 FedAvg rounds vs the 86.45%
+centralized reference — the accuracy cost of full data privacy is measured, not assumed.
 
 ## 3. Why it matters (impact)
 
@@ -96,7 +97,7 @@ while staying within ~1 point of its accuracy:
 | # | Gap in the IEEE-style approach | EdgeShield's answer | Proof in this repo |
 |---|---|---|---|
 | 1 | **Centralized inference** — traffic must travel to a server | On-device int8 ONNX inference | `ml-inference-service/`, latency measured per request |
-| 2 | **Server-class model** — too heavy for gateways | 22.1× smaller model, 1.8× faster, quantization cost measured (85.30% → 85.15%) | `ml-engine/quantize.py`, `benchmarks/results.json` |
+| 2 | **Server-class model** — too heavy for gateways | 22.1× smaller model, ~4.5× faster, quantization cost measured (86.45% → 86.36%) | `ml-engine/quantize.py`, `benchmarks/results.json` |
 | 3 | **Raw data pooling** — privacy is surrendered by design | FedAvg across 5 non-IID device shards; only weights move | `federated-learning/run_federated.py`, real per-round curve in `history.json` |
 | 4 | **Black-box verdicts** — no reasoning offered | SHAP (Expected Gradients) per class *and* per individual flow, live | `ml-inference-service/explain/`, `/explain` endpoint |
 | 5 | **Results live in notebooks** — no operational surface | Real-time SOC dashboard driven only by live inference events | `backend/` + `frontend/` |

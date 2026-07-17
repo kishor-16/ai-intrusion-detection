@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-17T19:12:21",
+  "generated_at": "2026-07-17T22:46:43",
   "test_rows": 39460,
   "classes": [
     "Normal",
@@ -16,9 +16,9 @@
     "f1_macro": 0.8298,
     "size_kb": 1661.2,
     "latency": {
-      "mean_ms": 0.048,
-      "p50_ms": 0.047,
-      "p95_ms": 0.058,
+      "mean_ms": 0.09,
+      "p50_ms": 0.081,
+      "p95_ms": 0.098,
       "runs": 300
     },
     "params": 422150,
@@ -27,25 +27,25 @@
     "edge_ready": false
   },
   "edgeshield_fp32": {
-    "accuracy": 0.853,
-    "f1_macro": 0.8224,
+    "accuracy": 0.8645,
+    "f1_macro": 0.8355,
     "size_kb": 218.4,
     "latency": {
-      "mean_ms": 0.022,
-      "p50_ms": 0.021,
-      "p95_ms": 0.023,
+      "mean_ms": 0.115,
+      "p50_ms": 0.092,
+      "p95_ms": 0.291,
       "runs": 300
     }
   },
   "edgeshield": {
     "name": "EdgeShield AI (int8 edge model + FL + SHAP)",
-    "accuracy": 0.8515,
-    "f1_macro": 0.8205,
+    "accuracy": 0.8636,
+    "f1_macro": 0.8347,
     "size_kb": 75.3,
     "latency": {
-      "mean_ms": 0.026,
-      "p50_ms": 0.026,
-      "p95_ms": 0.028,
+      "mean_ms": 0.02,
+      "p50_ms": 0.02,
+      "p95_ms": 0.022,
       "runs": 300
     },
     "raw_data_leaves_device": false,

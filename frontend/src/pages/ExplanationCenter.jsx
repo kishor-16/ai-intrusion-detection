@@ -35,8 +35,11 @@ export default function ExplanationCenter() {
   async function runLive() {
     if (!sel) return;
     setBusy(true); setLive(null);
-    try { setLive(await api.explain(sel.features)); }
-    catch (e) { setLive({ error: String(e) }); }
+    try {
+      // explain by flow id: backend loads the persisted feature vector,
+      // runs per-instance SHAP, and returns the NL explanation text
+      setLive(await api.explainFlow(sel.meta.flow_id));
+    } catch (e) { setLive({ error: String(e) }); }
     setBusy(false);
   }
 
@@ -108,10 +111,20 @@ export default function ExplanationCenter() {
           {live?.error && <div className="empty">Failed: {live.error}</div>}
           {live?.features && (
             <>
+              {live.explanation_text && (
+                <p style={{
+                  fontSize: 12.5, lineHeight: 1.65, marginBottom: 12,
+                  padding: '10px 12px', borderRadius: 9,
+                  background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.25)',
+                }}>
+                  {live.explanation_text}
+                </p>
+              )}
               <ShapBars items={live.features} />
               <div className="src">
                 computed live in {live.explain_time_ms} ms · model verdict {live.label}
                 {' '}({(live.confidence * 100).toFixed(1)}%) · per-instance Expected Gradients (SHAP estimator)
+                {' '}· text is a deterministic rendering of these measured values
               </div>
             </>
           )}

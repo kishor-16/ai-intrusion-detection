@@ -216,6 +216,12 @@ body {
   animation: alarm 1.1s ease-in-out infinite;
 }
 .device.protected { border-color: rgba(34, 255, 136, 0.5); }
+.device.suspicious { border-color: rgba(255, 176, 32, 0.6); background: rgba(255, 176, 32, 0.05); }
+.device.quarantined {
+  border-color: rgba(176, 107, 255, 0.7);
+  background: rgba(176, 107, 255, 0.08);
+  box-shadow: 0 0 14px rgba(176, 107, 255, 0.3);
+}
 @keyframes alarm {
   0%, 100% { box-shadow: 0 0 6px rgba(255, 59, 92, 0.25); }
   50% { box-shadow: 0 0 26px rgba(255, 59, 92, 0.6); }
@@ -224,6 +230,8 @@ body {
 .dot.online { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
 .dot.under-attack { background: var(--red); box-shadow: 0 0 10px var(--red); }
 .dot.protected { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.dot.suspicious { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+.dot.quarantined { background: var(--purple); box-shadow: 0 0 10px var(--purple); }
 
 /* ---------- threat feed ---------- */
 .feed { display: flex; flex-direction: column; gap: 8px; }
@@ -247,6 +255,116 @@ body {
 .alert .det { font-size: 11.5px; color: var(--text-dim); font-family: var(--mono); overflow-wrap: anywhere; }
 .alert.low-conf { border-style: dashed; border-color: rgba(255, 176, 32, 0.5); background: rgba(255, 176, 32, 0.045); }
 @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+/* autonomous-response system entries in the feed */
+.alert.response-entry {
+  background: rgba(0, 212, 255, 0.045);
+  border-color: rgba(0, 212, 255, 0.30);
+  border-style: solid;
+  cursor: default;
+}
+.alert.response-entry::before { background: var(--cyan); }
+.alert.response-entry .resp-text { font-size: 12.5px; line-height: 1.5; }
+.alert.response-entry.quarantine { border-color: rgba(176, 107, 255, 0.45); background: rgba(176, 107, 255, 0.06); }
+.alert.response-entry.quarantine::before { background: var(--purple); }
+
+/* incident status badges */
+.inc-status { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; padding: 2px 9px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+.inc-status.Open { color: var(--red); border-color: rgba(255, 59, 92, 0.5); }
+.inc-status.Investigating { color: var(--amber); border-color: rgba(255, 176, 32, 0.5); }
+.inc-status.Contained { color: var(--cyan); border-color: rgba(0, 212, 255, 0.45); }
+.inc-status.Resolved { color: var(--green); border-color: rgba(34, 255, 136, 0.45); }
+.inc-action { font-size: 10.5px; padding: 3px 9px; }
+
+/* ---------- notification center ---------- */
+.bell-wrap { position: relative; }
+.bell-btn { position: relative; padding: 8px 12px; font-size: 15px; }
+.bell-badge {
+  position: absolute; top: -4px; right: -4px;
+  min-width: 17px; height: 17px; padding: 0 4px;
+  background: var(--red); color: #fff; border-radius: 999px;
+  font-size: 10px; font-weight: 800; display: grid; place-items: center;
+  box-shadow: 0 0 10px rgba(255, 59, 92, 0.6);
+  animation: badgePop 0.3s ease;
+}
+@keyframes badgePop { from { transform: scale(0.4); } to { transform: scale(1); } }
+.bell-panel {
+  position: absolute; right: 0; top: calc(100% + 8px); width: 380px; max-width: 88vw;
+  background: var(--bg-2); border: 1px solid var(--panel-border-strong);
+  border-radius: var(--r-lg); z-index: 60;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+  animation: slideIn 0.2s ease;
+}
+.bell-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; border-bottom: 1px solid var(--panel-border);
+  font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--text-dim); font-weight: 650;
+}
+.bell-list { max-height: 46vh; overflow-y: auto; }
+.bell-item {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center;
+  padding: 10px 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 12.5px;
+}
+.bell-item .bell-ch { font-size: 15px; }
+.bell-item .bell-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.bell-item .det { font-size: 10.5px; }
+.bell-foot { padding: 8px 14px; }
+.notif-status {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 999px; border: 1px solid; white-space: nowrap;
+}
+.notif-status.ok { color: var(--green); border-color: rgba(34, 255, 136, 0.4); }
+.notif-status.sim { color: var(--amber); border-color: rgba(255, 176, 32, 0.5); }
+.notif-status.fail { color: var(--red); border-color: rgba(255, 59, 92, 0.5); }
+.notif-status.wait { color: var(--text-dim); border-color: var(--panel-border-strong); }
+
+/* ---------- toasts ---------- */
+.toast-stack {
+  position: fixed; bottom: 18px; right: 18px; z-index: 70;
+  display: flex; flex-direction: column; gap: 8px; max-width: 340px;
+}
+.toast {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg-2); border: 1px solid var(--panel-border-strong);
+  border-left: 4px solid var(--sev-color, var(--cyan));
+  border-radius: var(--r-md); padding: 10px 14px; font-size: 12.5px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  animation: toastIn 0.3s ease;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: none; } }
+
+/* ---------- critical alarm banner ---------- */
+.alarm-banner {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 22px; font-size: 13px; color: #fff;
+  background: linear-gradient(90deg, rgba(255, 59, 92, 0.35), rgba(255, 59, 92, 0.15));
+  border-bottom: 1px solid var(--red);
+  animation: alarmFlash 0.9s ease-in-out infinite;
+}
+@keyframes alarmFlash {
+  0%, 100% { background: linear-gradient(90deg, rgba(255, 59, 92, 0.4), rgba(255, 59, 92, 0.15)); }
+  50% { background: linear-gradient(90deg, rgba(255, 59, 92, 0.16), rgba(255, 59, 92, 0.05)); }
+}
+.alarm-banner .alarm-icon { font-size: 17px; animation: chipPulse 0.9s infinite; }
+.alarm-banner .alarm-dismiss { margin-left: auto; border-color: rgba(255, 255, 255, 0.4); padding: 5px 12px; font-size: 12px; }
+
+/* ---------- settings page ---------- */
+.set-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+.set-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); font-weight: 650; }
+.set-hint { font-size: 10.5px; color: var(--text-faint); }
+.set-input {
+  font-family: var(--font); font-size: 13px; color: var(--text);
+  background: rgba(255, 255, 255, 0.04); border: 1px solid var(--panel-border);
+  border-radius: 8px; padding: 8px 11px; width: 100%;
+}
+.set-input:focus { outline: none; border-color: rgba(0, 212, 255, 0.5); }
+.set-flash { padding: 10px 16px; font-size: 13px; }
+.set-flash.ok { border-color: rgba(34, 255, 136, 0.45); color: var(--green); }
+.set-flash.fail { border-color: rgba(255, 59, 92, 0.5); color: var(--red); }
+input[type="range"] { accent-color: var(--cyan); width: 100%; }
+input[type="checkbox"] { accent-color: var(--cyan); width: 15px; height: 15px; }
 
 .tag {
   display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: 0.5px;

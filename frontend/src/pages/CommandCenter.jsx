@@ -38,17 +38,22 @@ export default function CommandCenter() {
   return (
     <div className="grid" style={{ gap: 16 }}>
       <div className="grid cols-5">
-        <Stat i={0} label="IoT Devices" value={devices.length || '—'} sub="virtual fleet (simulated)" />
+        <Stat i={0} label="IoT Devices"
+          value={devices.length ? `${m.devicesOnline ?? devices.length}/${devices.length}` : '—'}
+          sub={m.devicesQuarantined ? `${m.devicesQuarantined} quarantined by auto-response`
+            : 'online · virtual fleet (simulated)'} />
         <Stat i={1} label="Flows Analyzed" value={m.totalFlows ?? '—'} accent="accent-blue"
-          sub="each one a real model inference" />
+          sub={m.blockedFlows ? `+ ${m.blockedFlows} blocked at gateway` : 'each one a real model inference'} />
         <Stat i={2} label="Threats Detected" value={m.threatsDetected ?? '—'} accent="accent-red"
-          sub="live model detections" />
+          sub={m.activeIncidents ? `${m.activeIncidents} open incidents` : 'live model detections'} />
         <Stat i={3} label="Live AI Accuracy" accent="accent-green"
           value={m.liveAccuracy != null ? `${(m.liveAccuracy * 100).toFixed(1)}%` : '—'}
           sub={m.liveSamples ? `measured on ${m.liveSamples} flows this run` : 'runs during simulation'} />
         <Stat i={4} label="Avg Detection Latency" accent="accent-blue"
           value={m.avgLatencyMs != null ? `${fmt(m.avgLatencyMs, 2)} ms` : '—'}
-          sub="mean of real per-flow inference times" />
+          sub={m.avgConfidence != null
+            ? `avg confidence ${(m.avgConfidence * 100).toFixed(1)}% · uptime ${Math.floor((m.uptimeSec || 0) / 60)}m`
+            : 'mean of real per-flow inference times'} />
       </div>
 
       <div className="grid cols-2">
@@ -105,8 +110,15 @@ export default function CommandCenter() {
               </div>
               <div className="ip">{d.ip} · {d.id}</div>
               <div className="stat-sub">{d.normal_desc}</div>
-              <div className="stat-sub" style={{ color: d.status === 'under-attack' ? 'var(--red)' : undefined }}>
-                {d.status === 'under-attack' ? `⚠ ${d.attack_label}` : d.status === 'protected' ? '✓ threat contained' : 'nominal'}
+              <div className="stat-sub" style={{
+                color: d.status === 'under-attack' ? 'var(--red)'
+                  : d.status === 'quarantined' ? 'var(--purple)'
+                    : d.status === 'suspicious' ? 'var(--amber)' : undefined,
+              }}>
+                {d.status === 'under-attack' ? `⚠ ${d.attack_label}`
+                  : d.status === 'quarantined' ? '⛔ quarantined — auto-response'
+                    : d.status === 'suspicious' ? '? suspicious activity'
+                      : d.status === 'protected' ? '✓ threat contained' : 'nominal'}
               </div>
             </div>
           ))}

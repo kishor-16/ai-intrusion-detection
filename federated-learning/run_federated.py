@@ -50,6 +50,13 @@ def load(name):
     return d["X"], d["y"]
 
 
+def emit(args, obj):
+    """--stream mode: machine-readable per-round events on stdout so the
+    backend can broadcast REAL training progress live to the dashboard."""
+    if getattr(args, "stream", False):
+        print("@@EVENT " + json.dumps(obj), flush=True)
+
+
 def partition_non_iid(X, y, rng):
     """Deterministic non-IID split: 60% of each attack class to its profile
     client, 40% spread over the rest; Normal split evenly."""
@@ -122,10 +129,18 @@ def run_builtin(args):
     acc0, f10 = evaluate(global_model, X_te, y_te)
     rounds.append({"round": 0, "accuracy": acc0, "f1_macro": f10,
                    "note": "untrained global model"})
+    emit(args, {"type": "start", "engine": "builtin-fedavg", "rounds": args.rounds,
+                "clients": [{"id": p["id"], "name": p["name"], "attack": p["attack"],
+                             "samples": int(len(shards[i]))}
+                            for i, p in enumerate(CLIENT_PROFILES)]})
+    emit(args, {"type": "round", "round": 0, "accuracy": acc0, "f1_macro": f10,
+                "total_rounds": args.rounds})
     t0 = time.time()
     for r in range(1, args.rounds + 1):
         states, weights = [], []
         for i in range(len(CLIENT_PROFILES)):
+            emit(args, {"type": "client", "round": r, "client": CLIENT_PROFILES[i]["id"],
+                        "status": "training"})
             local = copy.deepcopy(global_model)
             sd = local_train(local, X_tr[shards[i]], y_tr[shards[i]],
                              args.local_epochs, args.lr, args.batch,
@@ -134,6 +149,9 @@ def run_builtin(args):
         global_model.load_state_dict(fedavg(states, weights))
         acc, f1 = evaluate(global_model, X_te, y_te)
         rounds.append({"round": r, "accuracy": acc, "f1_macro": f1})
+        emit(args, {"type": "round", "round": r, "accuracy": acc, "f1_macro": f1,
+                    "total_rounds": args.rounds,
+                    "elapsed_sec": round(time.time() - t0, 1)})
         print(f"[fl] round {r:02d}/{args.rounds}  test_acc={acc:.4f}  f1={f1:.4f}")
 
     torch.save({"state_dict": global_model.state_dict(), "arch": "EdgeShieldNet"},
@@ -201,6 +219,8 @@ def main():
     ap.add_argument("--local-epochs", type=int, default=2)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--batch", type=int, default=128)
+    ap.add_argument("--stream", action="store_true",
+                    help="emit @@EVENT JSON lines per round (live dashboard mode)")
     args = ap.parse_args()
 
     if args.engine == "flower":
@@ -230,6 +250,8 @@ def main():
         "rounds": rounds,
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
     }, indent=2))
+    emit(args, {"type": "done", "engine": engine, "final_accuracy": rounds[-1]["accuracy"],
+                "duration_sec": round(dur, 1), "centralized_reference": central})
     print(f"[fl] engine={engine} final_acc={rounds[-1]['accuracy']} "
           f"(centralized ref={central}) -> {FL_HISTORY}")
 

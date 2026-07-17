@@ -20,13 +20,16 @@ const WAVES = [
   { from: 34, to: 37, deviceId: 'sensor-02' }, // spoofing
   { from: 42, to: 45, deviceId: 'home-05' },   // malware beaconing
 ];
-const END_TICK = 52;
+// post-attack cool-down ticks let the autonomous response engine release
+// quarantines and recover devices before the run ends
+const END_TICK = 58;
 
 class Scenario {
-  constructor({ simulator, inference, onEvent }) {
+  constructor({ simulator, inference, onEvent, hooks = {} }) {
     this.sim = simulator;       // axios instance -> simulator service
     this.inf = inference;       // axios instance -> inference service
     this.onEvent = onEvent;     // (eventName, payload) => broadcast
+    this.hooks = hooks;         // { isBlocked(deviceId), onTick(t), onBlocked(n) }
     this.deviceIds = [];
     this._clear();
   }
@@ -101,19 +104,11 @@ class Scenario {
     // per-tick status so the dashboard's wave timeline tracks the run live
     this.onEvent('scenario-status', this.status());
 
-    const wave = this._activeWave(t);
+    // Device-status transitions are now owned by the autonomous response
+    // engine, driven by REAL detections — not scripted here.
+    this.hooks.onTick?.(t);
 
-    // device status transitions (attack begins / ends)
-    for (const w of WAVES) {
-      if (t === w.from) {
-        this.waveState[w.deviceId] = true;
-        this.onEvent('device-status', { deviceId: w.deviceId, status: 'under-attack' });
-      }
-      if (t === w.to + 1) {
-        this.waveState[w.deviceId] = false;
-        this.onEvent('device-status', { deviceId: w.deviceId, status: 'protected' });
-      }
-    }
+    const wave = this._activeWave(t);
 
     if (wave) {
       // attack tick: 2 attack flows on the target + 1 normal flow elsewhere
@@ -129,6 +124,12 @@ class Scenario {
 
   /** Generate flows on the simulator, run REAL inference on each, broadcast. */
   async _emitFlows(deviceId, mode, count) {
+    // quarantined devices are blocked at the gateway: their traffic never
+    // reaches the network (autonomous response engine owns this state)
+    if (this.hooks.isBlocked?.(deviceId)) {
+      this.hooks.onBlocked?.(count);
+      return;
+    }
     const gen = await this.sim.post('/generate', { device_id: deviceId, mode, count });
     for (const ev of gen.data.events) {
       const pred = await this.inf.post('/predict', { features: ev.features });

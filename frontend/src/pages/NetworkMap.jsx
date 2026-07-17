@@ -6,6 +6,16 @@ const DEVICE_GLYPHS = {
   'cam-01': '📷', 'sensor-02': '🏭', 'router-03': '📡', 'med-04': '🏥', 'home-05': '🏠',
 };
 
+// device security states — driven by the backend's autonomous response engine
+const STATUS_COLOR = {
+  online: '#00d4ff', suspicious: '#ffb020', 'under-attack': '#ff3b5c',
+  quarantined: '#b06bff', protected: '#22ff88', offline: '#5a6486',
+};
+const STATUS_TEXT = {
+  suspicious: '? suspicious', quarantined: '⛔ quarantined — traffic blocked',
+  protected: '✓ contained', offline: 'offline',
+};
+
 /**
  * IoT Network Map (2D SVG: low-risk, offline, smooth).
  * Node/edge states come from live device-status events; attacked links animate
@@ -48,13 +58,16 @@ export default function NetworkMap() {
           {/* edges + packet flows */}
           {pos.map((d) => {
             const attacked = d.status === 'under-attack';
+            const blocked = d.status === 'quarantined';
             const t = lastByDevice[d.id];
             const pktColor = attacked ? (t ? metaFor(t.prediction.label).color : '#ff3b5c') : '#00d4ff';
             return (
               <g key={`e-${d.id}`}>
                 <line x1={cx} y1={cy} x2={d.x} y2={d.y}
-                  className={attacked ? 'edge-attack' : 'edge-ok'} />
-                {(attacked || trafficLive) && (
+                  className={attacked ? 'edge-attack' : 'edge-ok'}
+                  opacity={blocked ? 0.25 : 1}
+                  strokeDasharray={blocked ? '2 6' : undefined} />
+                {!blocked && (attacked || trafficLive) && (
                   <circle r={attacked ? 3.5 : 2.2} fill={pktColor} opacity="0.9">
                     <animateMotion
                       dur={attacked ? '0.8s' : '2.6s'}
@@ -91,13 +104,12 @@ export default function NetworkMap() {
           {/* devices */}
           {pos.map((d) => {
             const attacked = d.status === 'under-attack';
-            const secured = d.status === 'protected';
-            const color = attacked ? '#ff3b5c' : secured ? '#22ff88' : '#00d4ff';
+            const color = STATUS_COLOR[d.status] || '#00d4ff';
             const t = lastByDevice[d.id];
             return (
               <g key={d.id}>
-                {attacked && (
-                  <circle cx={d.x} cy={d.y} r={22} fill="none" stroke="#ff3b5c">
+                {(attacked || d.status === 'quarantined') && (
+                  <circle cx={d.x} cy={d.y} r={22} fill="none" stroke={color}>
                     <animate attributeName="r" values="18;34;18" dur="1.1s" repeatCount="indefinite" />
                     <animate attributeName="opacity" values="0.8;0;0.8" dur="1.1s" repeatCount="indefinite" />
                   </circle>
@@ -114,8 +126,10 @@ export default function NetworkMap() {
                     {t.prediction.label} · {(t.prediction.confidence * 100).toFixed(0)}%
                   </text>
                 )}
-                {secured && (
-                  <text x={d.x} y={d.y + 48} textAnchor="middle" fill="#22ff88">✓ contained</text>
+                {STATUS_TEXT[d.status] && (
+                  <text x={d.x} y={d.y + (attacked && t ? 62 : 48)} textAnchor="middle" fill={color}>
+                    {STATUS_TEXT[d.status]}
+                  </text>
                 )}
               </g>
             );
@@ -124,8 +138,10 @@ export default function NetworkMap() {
       )}
       <div className="map-legend">
         <span><span className="dot online" />online</span>
+        <span><span className="dot suspicious" />suspicious</span>
         <span><span className="dot under-attack" />under attack</span>
-        <span><span className="dot protected" />threat contained</span>
+        <span><span className="dot quarantined" />quarantined</span>
+        <span><span className="dot protected" />contained</span>
         <span style={{ marginLeft: 'auto' }}>packet dots = flow direction (illustrative)</span>
       </div>
       <div className="src">

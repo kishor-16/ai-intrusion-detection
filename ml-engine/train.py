@@ -123,9 +123,12 @@ def main():
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=args.epochs)
-    # class-weighted loss (Brute Force has ~4x fewer samples) + label smoothing
+    # Tempered class weighting (sqrt of inverse frequency) + label smoothing.
+    # Full inverse-frequency weighting over-boosted the minority class (Brute
+    # Force: recall 0.85 but precision 0.43 — other attacks were pulled into
+    # it); sqrt tempering keeps the minority visible without that distortion.
     counts = np.bincount(y_tr.numpy(), minlength=len(CLASSES)).astype(np.float64)
-    weights = counts.sum() / (len(CLASSES) * counts)
+    weights = np.sqrt(counts.sum() / (len(CLASSES) * counts))
     print(f"[train] class weights: "
           f"{ {CLASSES[i]: round(float(w),2) for i, w in enumerate(weights)} }")
     lossf = nn.CrossEntropyLoss(

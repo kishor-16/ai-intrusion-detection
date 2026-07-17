@@ -5,6 +5,7 @@ venv/
 node_modules/
 dist/
 .env
+backend/data/
 dataset/raw/
 kaggle.json
 dataset/subset/
@@ -12,3 +13,7 @@ dataset/processed/
 *.npz
 *.parquet
 .DS_Store
+backend/data/edgeshield.db
+backend/data/edgeshield.db-wal
+backend/data/edgeshield.db-journal
+.env

@@ -8,6 +8,10 @@ import ExplanationCenter from './pages/ExplanationCenter.jsx';
 import EdgePerformance from './pages/EdgePerformance.jsx';
 import FederatedLearning from './pages/FederatedLearning.jsx';
 import NetworkMap from './pages/NetworkMap.jsx';
+import NotificationSettings from './pages/NotificationSettings.jsx';
+import {
+  NotificationBell, Toasts, AlarmBanner, BrowserNotifier,
+} from './notifications.jsx';
 
 const NAV = [
   { to: '/', label: 'Command Center', icon: 'M4 13h6V4H4v9zm0 7h6v-5H4v5zm10 0h6v-9h-6v9zm0-16v5h6V4h-6z' },
@@ -16,6 +20,7 @@ const NAV = [
   { to: '/edge', label: 'Edge Performance', icon: 'M13 2 3 14h7v8l10-12h-7l0-8z' },
   { to: '/federated', label: 'Federated Learning', icon: 'M12 3a3 3 0 1 1-3 3 3 3 0 0 1 3-3zM5 15a3 3 0 1 1-3 3 3 3 0 0 1 3-3zm14 0a3 3 0 1 1-3 3 3 3 0 0 1 3-3zM11 9l-4 5m6-5 4 5' },
   { to: '/map', label: 'Network Map', icon: 'M12 2a4 4 0 1 1-4 4 4 4 0 0 1 4-4zM4 16a3 3 0 1 1-2 3m18-3a3 3 0 1 0 2 3M8.5 8.5 5 17m10.5-8.5L19 17' },
+  { to: '/settings', label: 'Notifications', icon: 'M12 22a2.2 2.2 0 0 0 2.2-2.2H9.8A2.2 2.2 0 0 0 12 22zm7-5.2V11a7 7 0 0 0-5-6.7V3a2 2 0 1 0-4 0v1.3A7 7 0 0 0 5 11v5.8L3 19v1h18v-1l-2-2.2z' },
 ];
 
 function Icon({ d }) {
@@ -149,8 +154,10 @@ export default function App() {
             </button>
           )}
           <button className="btn ghost" onClick={api.reset} disabled={!connected}>⟲ Reset</button>
+          <NotificationBell />
         </header>
 
+        <AlarmBanner />
         <ScenarioStrip />
 
         <main className="content">
@@ -161,9 +168,12 @@ export default function App() {
             <Route path="/edge" element={<EdgePerformance />} />
             <Route path="/federated" element={<FederatedLearning />} />
             <Route path="/map" element={<NetworkMap />} />
+            <Route path="/settings" element={<NotificationSettings />} />
           </Routes>
         </main>
       </div>
+      <Toasts />
+      <BrowserNotifier />
     </div>
   );
 }
