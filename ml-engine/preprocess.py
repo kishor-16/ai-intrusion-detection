@@ -74,7 +74,7 @@ def main():
     df = df[df[LABEL_COLUMN].isin(CLASSES)]
     print(f"[preprocess] cleaned: {n0:,} -> {len(df):,} rows")
 
-    X = df[FEATURE_COLUMNS].to_numpy(dtype=np.float64)
+    X = df[FEATURE_COLUMNS].to_numpy(dtype=np.float64).copy()
     y = np.array([CLASSES.index(v) for v in df[LABEL_COLUMN]], dtype=np.int64)
 
     # --- signed log1p on heavy-tailed continuous features ---------------------

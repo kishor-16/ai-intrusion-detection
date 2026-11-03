@@ -58,9 +58,15 @@ def count_params(model: nn.Module) -> int:
 def export_onnx(model: nn.Module, path, in_dim: int = N_FEATURES):
     model.eval()
     dummy = torch.zeros(1, in_dim, dtype=torch.float32)
+    kwargs = {}
+    try:
+        import onnxscript  # noqa: F401
+    except ImportError:
+        kwargs["dynamo"] = False
     torch.onnx.export(
         model, dummy, str(path),
         input_names=["features"], output_names=["logits"],
         dynamic_axes={"features": {0: "batch"}, "logits": {0: "batch"}},
         opset_version=17,
+        **kwargs,
     )

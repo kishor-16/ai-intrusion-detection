@@ -1,49 +1,49 @@
 {
-  "generated_at": "2026-07-17T22:40:49",
+  "generated_at": "2026-11-03T21:24:08",
   "method": "Expected Gradients (SHAP GradientExplainer estimator, pure PyTorch), 200-flow background, correctly-classified test flows",
   "per_class": {
     "Normal": {
       "n_flows": 150,
       "top_features": [
         {
-          "feature": "Header_Length",
-          "impact": 1.18514,
-          "direction": "+"
-        },
-        {
-          "feature": "IAT",
-          "impact": 0.94244,
-          "direction": "+"
-        },
-        {
           "feature": "rst_count",
-          "impact": 0.92125,
+          "impact": 0.40272,
           "direction": "+"
         },
         {
-          "feature": "Number",
-          "impact": 0.7321,
-          "direction": "-"
-        },
-        {
-          "feature": "urg_count",
-          "impact": 0.56727,
+          "feature": "Header_Length",
+          "impact": 0.3682,
           "direction": "+"
         },
         {
-          "feature": "flow_duration",
-          "impact": 0.55558,
-          "direction": "-"
+          "feature": "HTTPS",
+          "impact": 0.30124,
+          "direction": "+"
         },
         {
-          "feature": "Max",
-          "impact": 0.41024,
+          "feature": "ack_count",
+          "impact": 0.2792,
           "direction": "+"
         },
         {
           "feature": "syn_count",
-          "impact": 0.27496,
-          "direction": "-"
+          "impact": 0.27864,
+          "direction": "+"
+        },
+        {
+          "feature": "IAT",
+          "impact": 0.27512,
+          "direction": "+"
+        },
+        {
+          "feature": "urg_count",
+          "impact": 0.26934,
+          "direction": "+"
+        },
+        {
+          "feature": "AVG",
+          "impact": 0.23163,
+          "direction": "+"
         }
       ]
     },
@@ -51,43 +51,43 @@
       "n_flows": 150,
       "top_features": [
         {
-          "feature": "IAT",
-          "impact": 1.20006,
-          "direction": "+"
-        },
-        {
-          "feature": "rst_count",
-          "impact": 0.62613,
-          "direction": "+"
-        },
-        {
-          "feature": "Variance",
-          "impact": 0.55481,
+          "feature": "Rate",
+          "impact": 0.53789,
           "direction": "+"
         },
         {
           "feature": "Header_Length",
-          "impact": 0.52885,
-          "direction": "-"
+          "impact": 0.49945,
+          "direction": "+"
+        },
+        {
+          "feature": "Srate",
+          "impact": 0.44186,
+          "direction": "+"
+        },
+        {
+          "feature": "Weight",
+          "impact": 0.30682,
+          "direction": "+"
         },
         {
           "feature": "Number",
-          "impact": 0.45967,
+          "impact": 0.29638,
           "direction": "+"
         },
         {
-          "feature": "Magnitue",
-          "impact": 0.44373,
+          "feature": "fin_count",
+          "impact": 0.27188,
           "direction": "+"
         },
         {
-          "feature": "Protocol Type",
-          "impact": 0.39664,
+          "feature": "syn_count",
+          "impact": 0.18873,
           "direction": "+"
         },
         {
-          "feature": "flow_duration",
-          "impact": 0.37839,
+          "feature": "Tot sum",
+          "impact": 0.18447,
           "direction": "+"
         }
       ]
@@ -96,43 +96,43 @@
       "n_flows": 150,
       "top_features": [
         {
-          "feature": "urg_count",
-          "impact": 0.99529,
-          "direction": "+"
-        },
-        {
-          "feature": "flow_duration",
-          "impact": 0.90606,
-          "direction": "+"
-        },
-        {
-          "feature": "Header_Length",
-          "impact": 0.70397,
-          "direction": "+"
-        },
-        {
           "feature": "SSH",
-          "impact": 0.70043,
-          "direction": "+"
-        },
-        {
-          "feature": "syn_count",
-          "impact": 0.64809,
-          "direction": "+"
-        },
-        {
-          "feature": "rst_count",
-          "impact": 0.56248,
+          "impact": 0.35959,
           "direction": "+"
         },
         {
           "feature": "IAT",
-          "impact": 0.35999,
+          "impact": 0.34005,
+          "direction": "+"
+        },
+        {
+          "feature": "urg_count",
+          "impact": 0.28622,
           "direction": "+"
         },
         {
           "feature": "fin_count",
-          "impact": 0.2745,
+          "impact": 0.28365,
+          "direction": "+"
+        },
+        {
+          "feature": "Telnet",
+          "impact": 0.23225,
+          "direction": "+"
+        },
+        {
+          "feature": "rst_count",
+          "impact": 0.22032,
+          "direction": "+"
+        },
+        {
+          "feature": "syn_count",
+          "impact": 0.18856,
+          "direction": "+"
+        },
+        {
+          "feature": "ack_count",
+          "impact": 0.18267,
           "direction": "+"
         }
       ]
@@ -141,43 +141,43 @@
       "n_flows": 150,
       "top_features": [
         {
-          "feature": "rst_count",
-          "impact": 1.71601,
-          "direction": "-"
+          "feature": "syn_count",
+          "impact": 0.45644,
+          "direction": "+"
         },
         {
           "feature": "Header_Length",
-          "impact": 1.44207,
+          "impact": 0.42336,
           "direction": "+"
         },
         {
-          "feature": "IAT",
-          "impact": 1.27985,
+          "feature": "fin_count",
+          "impact": 0.32342,
           "direction": "+"
         },
         {
-          "feature": "Number",
-          "impact": 1.16008,
+          "feature": "Tot sum",
+          "impact": 0.30189,
           "direction": "+"
         },
         {
-          "feature": "urg_count",
-          "impact": 1.0282,
+          "feature": "rst_count",
+          "impact": 0.26943,
           "direction": "+"
         },
         {
-          "feature": "flow_duration",
-          "impact": 0.3168,
+          "feature": "ack_count",
+          "impact": 0.26461,
           "direction": "+"
         },
         {
-          "feature": "Max",
-          "impact": 0.28569,
+          "feature": "Rate",
+          "impact": 0.2474,
           "direction": "+"
         },
         {
-          "feature": "syn_count",
-          "impact": 0.20752,
+          "feature": "ARP",
+          "impact": 0.22057,
           "direction": "+"
         }
       ]
@@ -187,42 +187,42 @@
       "top_features": [
         {
           "feature": "Header_Length",
-          "impact": 1.14041,
+          "impact": 0.49553,
           "direction": "+"
         },
         {
           "feature": "rst_count",
-          "impact": 0.78061,
-          "direction": "-"
+          "impact": 0.45402,
+          "direction": "+"
         },
         {
-          "feature": "IAT",
-          "impact": 0.67513,
+          "feature": "fin_count",
+          "impact": 0.22303,
+          "direction": "+"
+        },
+        {
+          "feature": "ack_count",
+          "impact": 0.19844,
+          "direction": "+"
+        },
+        {
+          "feature": "Duration",
+          "impact": 0.18466,
+          "direction": "+"
+        },
+        {
+          "feature": "Max",
+          "impact": 0.15894,
+          "direction": "+"
+        },
+        {
+          "feature": "AVG",
+          "impact": 0.15511,
           "direction": "+"
         },
         {
           "feature": "flow_duration",
-          "impact": 0.57234,
-          "direction": "+"
-        },
-        {
-          "feature": "urg_count",
-          "impact": 0.43431,
-          "direction": "+"
-        },
-        {
-          "feature": "Number",
-          "impact": 0.36963,
-          "direction": "-"
-        },
-        {
-          "feature": "fin_count",
-          "impact": 0.34178,
-          "direction": "+"
-        },
-        {
-          "feature": "Protocol Type",
-          "impact": 0.20525,
+          "impact": 0.13767,
           "direction": "+"
         }
       ]
@@ -231,43 +231,43 @@
       "n_flows": 150,
       "top_features": [
         {
-          "feature": "Protocol Type",
-          "impact": 1.39458,
-          "direction": "+"
-        },
-        {
           "feature": "IAT",
-          "impact": 0.89135,
-          "direction": "+"
-        },
-        {
-          "feature": "Header_Length",
-          "impact": 0.64444,
-          "direction": "-"
-        },
-        {
-          "feature": "rst_count",
-          "impact": 0.62589,
+          "impact": 1.22541,
           "direction": "+"
         },
         {
           "feature": "urg_count",
-          "impact": 0.48219,
-          "direction": "-"
-        },
-        {
-          "feature": "Number",
-          "impact": 0.41672,
+          "impact": 0.70858,
           "direction": "+"
         },
         {
-          "feature": "Weight",
-          "impact": 0.41086,
+          "feature": "Drate",
+          "impact": 0.272,
           "direction": "+"
         },
         {
-          "feature": "TCP",
-          "impact": 0.41015,
+          "feature": "flow_duration",
+          "impact": 0.17936,
+          "direction": "+"
+        },
+        {
+          "feature": "ack_count",
+          "impact": 0.17296,
+          "direction": "+"
+        },
+        {
+          "feature": "IRC",
+          "impact": 0.17241,
+          "direction": "+"
+        },
+        {
+          "feature": "rst_count",
+          "impact": 0.13019,
+          "direction": "+"
+        },
+        {
+          "feature": "Header_Length",
+          "impact": 0.10562,
           "direction": "+"
         }
       ]

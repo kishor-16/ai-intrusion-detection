@@ -4,114 +4,139 @@
   "seed": 42,
   "num_clients": 5,
   "partition": "non-IID by device profile (60% primary attack class)",
-  "local_epochs": 1,
-  "duration_sec": 84.0,
+  "local_epochs": 2,
+  "duration_sec": 12.1,
   "privacy_note": "Only model weights are exchanged; raw flows never leave a client shard.",
-  "centralized_reference_accuracy": 0.8645,
+  "centralized_reference_accuracy": 0.9994,
   "clients": [
     {
       "id": "client-camera",
       "name": "Smart Camera edge node",
       "attack": "DDoS",
-      "samples": 39415,
+      "samples": 1680,
       "class_distribution": {
-        "Normal": 7000,
-        "DDoS": 21000,
-        "Brute Force": 915,
-        "Spoofing": 3500,
-        "Scanning": 3500,
-        "Malware": 3500
+        "Normal": 280,
+        "DDoS": 840,
+        "Brute Force": 140,
+        "Spoofing": 140,
+        "Scanning": 140,
+        "Malware": 140
       }
     },
     {
       "id": "client-sensor",
       "name": "Industrial Sensor edge node",
       "attack": "Spoofing",
-      "samples": 39415,
+      "samples": 1680,
       "class_distribution": {
-        "Normal": 7000,
-        "DDoS": 3500,
-        "Brute Force": 915,
-        "Spoofing": 21000,
-        "Scanning": 3500,
-        "Malware": 3500
+        "Normal": 280,
+        "DDoS": 140,
+        "Brute Force": 140,
+        "Spoofing": 840,
+        "Scanning": 140,
+        "Malware": 140
       }
     },
     {
       "id": "client-router",
       "name": "Smart Router edge node",
       "attack": "Scanning",
-      "samples": 39414,
+      "samples": 1680,
       "class_distribution": {
-        "Normal": 7000,
-        "DDoS": 3500,
-        "Brute Force": 914,
-        "Spoofing": 3500,
-        "Scanning": 21000,
-        "Malware": 3500
+        "Normal": 280,
+        "DDoS": 140,
+        "Brute Force": 140,
+        "Spoofing": 140,
+        "Scanning": 840,
+        "Malware": 140
       }
     },
     {
       "id": "client-medical",
       "name": "Medical IoT edge node",
       "attack": "Brute Force",
-      "samples": 26486,
+      "samples": 1680,
       "class_distribution": {
-        "Normal": 7000,
-        "DDoS": 3500,
-        "Brute Force": 5486,
-        "Spoofing": 3500,
-        "Scanning": 3500,
-        "Malware": 3500
+        "Normal": 280,
+        "DDoS": 140,
+        "Brute Force": 840,
+        "Spoofing": 140,
+        "Scanning": 140,
+        "Malware": 140
       }
     },
     {
       "id": "client-home",
       "name": "Smart Home edge node",
       "attack": "Malware",
-      "samples": 39414,
+      "samples": 1680,
       "class_distribution": {
-        "Normal": 7000,
-        "DDoS": 3500,
-        "Brute Force": 914,
-        "Spoofing": 3500,
-        "Scanning": 3500,
-        "Malware": 21000
+        "Normal": 280,
+        "DDoS": 140,
+        "Brute Force": 140,
+        "Spoofing": 140,
+        "Scanning": 140,
+        "Malware": 840
       }
     }
   ],
   "rounds": [
     {
       "round": 0,
-      "accuracy": 0.1901,
-      "f1_macro": 0.0532,
+      "accuracy": 0.1667,
+      "f1_macro": 0.0476,
       "note": "untrained global model"
     },
     {
       "round": 1,
-      "accuracy": 0.7919,
-      "f1_macro": 0.714
+      "accuracy": 0.9706,
+      "f1_macro": 0.9707
     },
     {
       "round": 2,
-      "accuracy": 0.8129,
-      "f1_macro": 0.7343
+      "accuracy": 0.9956,
+      "f1_macro": 0.9956
     },
     {
       "round": 3,
-      "accuracy": 0.8178,
-      "f1_macro": 0.7425
+      "accuracy": 0.9978,
+      "f1_macro": 0.9978
     },
     {
       "round": 4,
-      "accuracy": 0.8191,
-      "f1_macro": 0.743
+      "accuracy": 0.9978,
+      "f1_macro": 0.9978
     },
     {
       "round": 5,
-      "accuracy": 0.8216,
-      "f1_macro": 0.7472
+      "accuracy": 0.9983,
+      "f1_macro": 0.9983
+    },
+    {
+      "round": 6,
+      "accuracy": 0.9983,
+      "f1_macro": 0.9983
+    },
+    {
+      "round": 7,
+      "accuracy": 0.9978,
+      "f1_macro": 0.9978
+    },
+    {
+      "round": 8,
+      "accuracy": 0.9989,
+      "f1_macro": 0.9989
+    },
+    {
+      "round": 9,
+      "accuracy": 0.9983,
+      "f1_macro": 0.9983
+    },
+    {
+      "round": 10,
+      "accuracy": 0.9978,
+      "f1_macro": 0.9978
     }
   ],
-  "generated_at": "2026-07-17T22:59:07"
+  "generated_at": "2026-11-03T21:24:30"
 }

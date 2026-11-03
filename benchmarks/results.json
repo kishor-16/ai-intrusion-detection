@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-17T22:46:43",
-  "test_rows": 39460,
+  "generated_at": "2026-11-03T21:24:56",
+  "test_rows": 1800,
   "classes": [
     "Normal",
     "DDoS",
@@ -9,16 +9,16 @@
     "Scanning",
     "Malware"
   ],
-  "data_source": "ciciot2023-subset",
+  "data_source": "synthetic-sample",
   "baseline": {
     "name": "Centralized IEEE-style MLP (float32)",
-    "accuracy": 0.86,
-    "f1_macro": 0.8298,
+    "accuracy": 0.9978,
+    "f1_macro": 0.9978,
     "size_kb": 1661.2,
     "latency": {
-      "mean_ms": 0.09,
-      "p50_ms": 0.081,
-      "p95_ms": 0.098,
+      "mean_ms": 0.104,
+      "p50_ms": 0.103,
+      "p95_ms": 0.123,
       "runs": 300
     },
     "params": 422150,
@@ -27,30 +27,30 @@
     "edge_ready": false
   },
   "edgeshield_fp32": {
-    "accuracy": 0.8645,
-    "f1_macro": 0.8355,
+    "accuracy": 0.9994,
+    "f1_macro": 0.9994,
     "size_kb": 218.4,
     "latency": {
-      "mean_ms": 0.115,
-      "p50_ms": 0.092,
-      "p95_ms": 0.291,
+      "mean_ms": 0.036,
+      "p50_ms": 0.036,
+      "p95_ms": 0.04,
       "runs": 300
     }
   },
   "edgeshield": {
     "name": "EdgeShield AI (int8 edge model + FL + SHAP)",
-    "accuracy": 0.8636,
-    "f1_macro": 0.8347,
-    "size_kb": 75.3,
+    "accuracy": 0.9994,
+    "f1_macro": 0.9994,
+    "size_kb": 75.1,
     "latency": {
-      "mean_ms": 0.02,
-      "p50_ms": 0.02,
-      "p95_ms": 0.022,
+      "mean_ms": 0.051,
+      "p50_ms": 0.049,
+      "p95_ms": 0.056,
       "runs": 300
     },
     "raw_data_leaves_device": false,
     "explainable": true,
     "edge_ready": true,
-    "fl_final_accuracy": 0.8384
+    "fl_final_accuracy": 0.9978
   }
 }

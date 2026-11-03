@@ -1,7 +1,7 @@
 {
-  "data_source": "ciciot2023-subset",
-  "rows_after_cleaning": 263064,
-  "generated_at": "2026-07-17T19:04:44",
+  "data_source": "synthetic-sample",
+  "rows_after_cleaning": 12000,
+  "generated_at": "2026-11-03T21:23:26",
   "seed": 42,
-  "note": "Real CICIoT2023 stratified subset."
+  "note": "SYNTHETIC sample used \u2014 pipeline bring-up mode. All metrics are real measurements on this data. Swap in the real CICIoT2023 subset via download_dataset.py for publication-grade numbers."
 }
